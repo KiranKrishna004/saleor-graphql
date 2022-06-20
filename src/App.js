@@ -1,5 +1,6 @@
 /** @format */
 
+import Login from "./components/Login";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./components/Home";
@@ -36,7 +37,7 @@ const App = () => {
 						].includes(node.name)
 				)
 			),
-		onError: (error) => console.log(error),
+		onError: (error) => console.log("error: ", error),
 	});
 
 	useEffect(() => {
@@ -58,6 +59,7 @@ const App = () => {
 						);
 					})}
 					<Route path='/Store' />
+					<Route path='/Login' element={<Login />} />
 					<Route path='/' element={<Home />} />
 				</Routes>
 			</Router>
