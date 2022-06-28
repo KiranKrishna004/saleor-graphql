@@ -5,10 +5,8 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Cookies from "universal-cookie";
 
 const Login = () => {
-	const cookies = new Cookies();
 	const dispatch = useDispatch();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -39,22 +37,25 @@ const Login = () => {
 			}
 		}
 	`;
+
 	const [getVerification, { loading1, error1, data: validation }] = useMutation(
 		VERIFY,
 		{
 			onCompleted: (validation) => {
 				if (validation.tokenVerify.isValid) {
-					cookies.set("token", data.tokenCreate.refreshToken, { path: "/" });
+					window.sessionStorage.setItem(
+						"notascamtoken",
+						data.tokenCreate.token
+					);
 					dispatch({ type: "TRUE" });
 				}
 			},
-			// console.log("isValid: ", validation.tokenVerify.isValid),
 			onError: (error) => console.log("Error: ", error),
 		}
 	);
 	const [getLogin, { loading, error, data }] = useMutation(LOGIN, {
 		onCompleted: (data) =>
-			getVerification({ variables: { token: data.tokenCreate.refreshToken } }),
+			getVerification({ variables: { token: data.tokenCreate.token } }),
 		onError: (error) => console.log("error: ", error),
 	});
 	const handleSubmit = (e) => {
